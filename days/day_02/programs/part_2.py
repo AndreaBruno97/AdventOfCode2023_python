@@ -29,6 +29,6 @@ class Part_2(BaseClass):
         return power_sum
 
 
-p1 = Part_2()
-p1.test(2286)
-p1.execute()
+p2 = Part_2()
+p2.test(2286)
+p2.execute()
