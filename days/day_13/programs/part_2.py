@@ -1,4 +1,5 @@
 from common import *
+import numpy as np
 
 
 class Part_2(BaseClass):
@@ -7,11 +8,36 @@ class Part_2(BaseClass):
         super().__init__()
 
     def execute_internal(self, filepath):
-        print(open_file(filepath))
+        matrix_list_str = open_file(filepath).split("\n\n")
+        matrix_list = [np.array([list(y) for y in x.split("\n")]) for x in matrix_list_str]
 
-        return -1
+        total = 0
+        for matrix in matrix_list:
+            rows, cols = matrix.shape
+
+            # test vertical symmetry
+            for cur_col in range(1, cols):
+                cols_to_compare = min(cur_col, cols-cur_col)
+                left_sub_matrix = matrix[:, cur_col-cols_to_compare:cur_col]
+                right_sub_matrix = matrix[:, cur_col:cur_col+cols_to_compare]
+
+                if np.sum(left_sub_matrix != right_sub_matrix[:, ::-1]) == 1:
+                    total += cur_col
+                    continue
+
+            # test horizontal symmetry
+            for cur_row in range(1, rows):
+                rows_to_compare = min(cur_row, rows - cur_row)
+                top_sub_matrix = matrix[cur_row - rows_to_compare:cur_row, :]
+                bottom_sub_matrix = matrix[cur_row:cur_row + rows_to_compare, :]
+
+                if np.sum(top_sub_matrix != bottom_sub_matrix[::-1, :]) == 1:
+                    total += cur_row * 100
+                    continue
+
+        return total
 
 
 p2 = Part_2()
-p2.test(0)
+p2.test(400)
 p2.execute()
