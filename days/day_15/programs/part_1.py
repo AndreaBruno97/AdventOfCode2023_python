@@ -7,11 +7,23 @@ class Part_1(BaseClass):
         super().__init__()
 
     def execute_internal(self, filepath):
-        print(open_file(filepath))
+        step_list = open_file(filepath).split(",")
 
-        return -1
+        total = 0
+
+        for step in step_list:
+            value = 0
+
+            for cur_char in list(step):
+                value += ord(cur_char)
+                value *= 17
+                value = value % 256
+
+            total += value
+
+        return total
 
 
 p1 = Part_1()
-p1.test(0)
+p1.test(1320, [("example_2.txt", 52)])
 p1.execute()
